@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { BackHandler, Platform, StyleSheet } from 'react-native';
+import { BackHandler, Platform, StyleSheet, SafeAreaView  } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 export default function App() {
@@ -38,7 +38,7 @@ export default function App() {
 
     <WebView
       ref={webView}
-      source={{ uri: "https://www.google.com.br/" }}
+      source={{ uri: "https://alexandrebqueiroz.github.io/app-fii/" }}
       originWhitelist={['*']}
       allowFileAccess={true}
       scalesPageToFit={true}
@@ -56,6 +56,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 20,
     justifyContent: 'center',
     backgroundColor: '#000000'
   }
