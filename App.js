@@ -1,20 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { BackHandler, Platform, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+  const webView = useRef(null);
+  const [canGoBack, setCanGoBack] = useState(false);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', HandleBackPressed);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', HandleBackPressed);
+      }
+    }
+  }, []); 
+
+  const HandleBackPressed = () => {
+    if (webView.current) {
+      webView.current.goBack();
+      return true; 
+    }
+    return false;
+  }
+  
+  return <>
+  <SafeAreaView 
+    style={styles.container} 
+    bounces={false} >
+
+    <StatusBar
+      backgroundColor="#9F9F9F"
+      hidden={false} 
+    />
+
+    <WebView
+      ref={webView}
+      source={{ uri: "https://www.google.com.br/" }}
+      originWhitelist={['*']}
+      allowFileAccess={true}
+      scalesPageToFit={true}
+      javaScriptEnabled={true}
+      geolocationEnabled={true}
+      onNavigationStateChange={
+        navState => setCanGoBack(navState.canGoBack)
+      }
+    />
+  </SafeAreaView>
+
+</>
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
-  },
+    backgroundColor: '#000000'
+  }
 });
+
